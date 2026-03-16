@@ -7,13 +7,20 @@ including example data modeling, DAX calculations, and interactive reporting.
 Through this project, I practiced how to transform raw data into meaningful insights using Power BI and modern business intelligence techniques.
 
 What I Learned
--During the course and while building this project, I worked on several important Power BI concepts, including:
+During the course and while building this project, I worked on several important Power BI concepts, including:
+
 -Creating and managing data models
+
 -Building relationships between tables
+
 -Using DAX (Data Analysis Expressions) to create calculated columns and measures
+
 -Designing interactive reports and dashboards
+
 -Working with Power Query for data transformation
+
 -Implementing filters, slicers, and conditional formatting
+
 -Applying best practices for BI dashboards
 
 
