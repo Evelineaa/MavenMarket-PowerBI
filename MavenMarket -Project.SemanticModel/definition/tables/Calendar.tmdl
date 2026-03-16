@@ -1,0 +1,112 @@
+table Calendar
+	excludeFromModelRefresh
+	lineageTag: 3f9e5f89-5064-43cb-9cd6-a221c5290abf
+
+	column date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 25f2ba0b-7fbe-4525-80e3-247f19cada48
+		summarizeBy: none
+		sourceColumn: date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Start of Week'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 590a1b3b-49b9-49f7-a5a4-b5b95292c0ce
+		summarizeBy: none
+		sourceColumn: Start of Week
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Day Name'
+		dataType: string
+		lineageTag: b1dde799-edbb-46cd-a34b-ae99b9355eb1
+		summarizeBy: none
+		sourceColumn: Day Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start of Month'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 95c87098-8aae-495b-b53e-99d08b01cf44
+		summarizeBy: none
+		sourceColumn: Start of Month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: dfb0b27d-ac73-4cfd-af73-6e0f8338cc78
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 993abb2b-147c-4bb4-854c-535ecb89b5b9
+		summarizeBy: sum
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 934712bd-4d1a-4ba7-a8ef-465c784a02aa
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weekend = ```
+			IF('Calendar'[Day Name] = "Saturday" || 
+			'Calendar'[Day Name] = "Sunday", 
+			"Y", 
+			"N")
+			```
+		lineageTag: e13ea180-8444-4ab0-adac-5f672813a711
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End of Month' = EOMONTH('Calendar'[Start of Month], 12)
+		formatString: Short Date
+		lineageTag: 398897a6-3def-4d02-a4af-987620fdf8e9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\milla\Downloads\Udemy\Power BI\Maven+Market+CSV+Files\MavenMarket_Calendar.csv"),[Delimiter=",", Columns=1, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"date", type date}}),
+				    #"Inserted Start of Week" = Table.AddColumn(#"Changed Type", "Start of Week", each Date.StartOfWeek([date]), type date),
+				    #"Inserted Start of Month" = Table.AddColumn(#"Inserted Start of Week", "Start of Month", each Date.StartOfMonth([date]), type date),
+				    #"Inserted Month Name" = Table.AddColumn(#"Inserted Start of Month", "Month Name", each Date.MonthName([date]), type text),
+				    #"Inserted Quarter" = Table.AddColumn(#"Inserted Month Name", "Quarter", each Date.QuarterOfYear([date]), Int64.Type),
+				    #"Inserted Year" = Table.AddColumn(#"Inserted Quarter", "Year", each Date.Year([date]), Int64.Type),
+				    #"Inserted Day Name" = Table.AddColumn(#"Inserted Year", "Day Name", each Date.DayOfWeekName([date]), type text),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Inserted Day Name",{"date", "Start of Week", "Day Name", "Start of Month", "Month Name", "Quarter", "Year"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

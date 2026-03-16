@@ -1,0 +1,163 @@
+table Stores
+	excludeFromModelRefresh
+	lineageTag: 1f913570-5c3b-4572-a428-bab2b5232dad
+
+	column store_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6e5b1309-dde0-489e-b839-d4a00abf06d6
+		summarizeBy: none
+		sourceColumn: store_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c77b9f87-a378-49e9-bd04-55f006c943ac
+		summarizeBy: none
+		sourceColumn: region_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_type
+		dataType: string
+		lineageTag: 0b3d66c2-7f21-4427-b5c0-b17e62e7cdfb
+		summarizeBy: none
+		sourceColumn: store_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_name
+		dataType: string
+		lineageTag: 50feca74-8f96-4431-a758-7b26bf33c4a5
+		summarizeBy: none
+		sourceColumn: store_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_street_address
+		dataType: string
+		lineageTag: 7bbf2fae-59e8-4398-8aba-adaadcef1486
+		summarizeBy: none
+		sourceColumn: store_street_address
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_city
+		dataType: string
+		lineageTag: 741508fe-e414-4e32-ba4c-5987cf625a97
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: store_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_state
+		dataType: string
+		lineageTag: 817ab4b3-72e7-44f4-8676-e3dfa51b9a7e
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: store_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_country
+		dataType: string
+		lineageTag: 6b546249-455c-451d-bf57-0b4b3e3dc1cf
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: store_country
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_phone
+		dataType: string
+		lineageTag: 1e1d3673-e34c-4cb2-80b8-7ebcffeb8cd9
+		summarizeBy: none
+		sourceColumn: store_phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_opened_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 28405053-a899-4996-8d88-a4ea1826712b
+		summarizeBy: none
+		sourceColumn: first_opened_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column last_remodel_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: e3dc995d-d599-4c62-8382-95fdc1da16d4
+		summarizeBy: none
+		sourceColumn: last_remodel_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column total_sqft
+		dataType: int64
+		formatString: 0
+		lineageTag: 9c65fdd8-55d0-4ad7-bd57-a88c749f3e62
+		summarizeBy: sum
+		sourceColumn: total_sqft
+
+		annotation SummarizationSetBy = Automatic
+
+	column grocery_sqft
+		dataType: int64
+		formatString: 0
+		lineageTag: ac84d505-fa10-41a1-a3b7-e5c3990b09f9
+		summarizeBy: sum
+		sourceColumn: grocery_sqft
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_address = Stores[store_city] & ", " & Stores[store_state] & ", " & Stores[store_country]
+		lineageTag: c1407c61-1ba1-4ad7-93a8-31d74a872eca
+		dataCategory: Address
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column area_code = LEFT(Stores[store_phone], FIND("-", Stores[store_phone]) -1)
+		lineageTag: 45ca2727-1f3c-410d-a7f5-c043bbb4789c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Years_Since_Remodel = DATEDIFF(Stores[last_remodel_date],TODAY(), YEAR)
+		formatString: 0
+		lineageTag: 178e5b6b-e3f9-4e31-a43a-7044e8dbf1c0
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Stores = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\milla\Downloads\Udemy\Power BI\Maven+Market+CSV+Files\MavenMarket_Stores.csv"),[Delimiter=",", Columns=13, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"store_id", Int64.Type}, {"region_id", Int64.Type}, {"store_type", type text}, {"store_name", type text}, {"store_street_address", type text}, {"store_city", type text}, {"store_state", type text}, {"store_country", type text}, {"store_phone", type text}, {"first_opened_date", type date}, {"last_remodel_date", type date}, {"total_sqft", Int64.Type}, {"grocery_sqft", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

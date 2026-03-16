@@ -1,0 +1,37 @@
+relationship e568bfbf-95a8-2c3a-c53b-51bc0b001492
+	fromColumn: Transaction_Data.customer_id
+	toColumn: Customers.customer_id
+
+relationship 064e72f0-b986-8a04-f7e1-9faaf54e4106
+	fromColumn: Transaction_Data.product_id
+	toColumn: Products.product_id
+
+relationship 31d6fe6c-db34-8655-1b2f-359ed937a912
+	fromColumn: Transaction_Data.store_id
+	toColumn: Stores.store_id
+
+relationship b543cd96-b5ae-c306-4907-e9644578e51f
+	isActive: false
+	fromColumn: Transaction_Data.stock_date
+	toColumn: Calendar.date
+
+relationship 6ced278f-259c-e4b9-3070-ab5a1f6137e2
+	fromColumn: Return_Data.product_id
+	toColumn: Products.product_id
+
+relationship e9644b92-cbfe-89e4-6bb4-740fa66ce39d
+	fromColumn: Return_Data.store_id
+	toColumn: Stores.store_id
+
+relationship 39b78acc-3628-de64-94b6-77eed71326d4
+	fromColumn: Stores.region_id
+	toColumn: Regions.region_id
+
+relationship ad87ddc2-c6f1-0104-b4db-6cbfbea560a9
+	fromColumn: Return_Data.return_date
+	toColumn: Calendar.date
+
+relationship a4277a58-2099-f8b8-9eb4-1226bae71522
+	fromColumn: Transaction_Data.transaction_date
+	toColumn: Calendar.date
+

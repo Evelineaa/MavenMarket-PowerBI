@@ -1,0 +1,44 @@
+table Regions
+	excludeFromModelRefresh
+	lineageTag: e5666d21-7a88-4bef-a19f-5ab654ccf395
+
+	column region_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c667aed0-2c56-4ab5-ad7e-c22a4b606158
+		summarizeBy: none
+		sourceColumn: region_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_district
+		dataType: string
+		lineageTag: 26668e2f-e5eb-4701-8dfd-8a2e3c27020d
+		summarizeBy: none
+		sourceColumn: sales_district
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_region
+		dataType: string
+		lineageTag: dde81b2d-74fc-4d49-a220-5410f3fd2f43
+		summarizeBy: none
+		sourceColumn: sales_region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Regions = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\milla\Downloads\Udemy\Power BI\Maven+Market+CSV+Files\MavenMarket_Regions.csv"),[Delimiter=",", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"region_id", Int64.Type}, {"sales_district", type text}, {"sales_region", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

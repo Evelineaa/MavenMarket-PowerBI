@@ -1,0 +1,79 @@
+table Return_Data
+	lineageTag: fbbb0f5b-e973-4749-90bc-f51c9d462bc6
+
+	measure 'Quantity Returned' = ```
+			SUM(Return_Data[quantity]) 
+			```
+		formatString: 0
+		lineageTag: df23864a-a7ca-4864-ab1b-9e11fa73259b
+
+	measure 'Total Returns' = COUNTROWS(Return_Data)
+		formatString: 0
+		lineageTag: db863f9b-5db8-42c4-af77-e0d914697f7f
+
+	measure 'Return Rate' = [Quantity Returned] / [Quantity Sold]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 3c79f904-1ad6-478d-91af-1e63c2e2b4f3
+
+	measure 'All Returns' = CALCULATE([Total Returns], ALL(Return_Data))
+		formatString: 0
+		lineageTag: 200af21d-4e65-44a8-ae95-2b3ddd1e2333
+
+	column return_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 524cbaa5-c7de-4fca-b859-36d2f5a54339
+		summarizeBy: none
+		sourceColumn: return_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column product_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 390a158a-62c7-4d42-9b0f-b54719ec5cfd
+		summarizeBy: none
+		sourceColumn: product_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2f4596ab-110e-4227-9c41-7ec439f6cd3f
+		summarizeBy: none
+		sourceColumn: store_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 32c99f07-63c0-411e-ba10-e87928dc0883
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Return_Data = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\milla\Downloads\Udemy\Power BI\Maven+Market+CSV+Files\MavenMarket_Returns_1997-1998.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"return_date", type date}, {"product_id", Int64.Type}, {"store_id", Int64.Type}, {"quantity", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

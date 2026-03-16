@@ -1,0 +1,50 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "24fa8e383ce777730595",
+  "position": {
+    "x": 307.96992481203046,
+    "y": 408.65240023134663,
+    "z": 4000,
+    "height": 137.6980913823019,
+    "width": 661.098901098901,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Tell Tale brand has made the best profits ",
+                    "textStyle": {
+                      "fontStyle": "italic",
+                      "fontSize": "24pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "(Comparing returns also)",
+                    "textStyle": {
+                      "fontStyle": "italic",
+                      "fontSize": "24pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
