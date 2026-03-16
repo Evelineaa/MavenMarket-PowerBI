@@ -27,3 +27,6 @@ During the course and while building this project, I worked on several important
 Purpose of the Project
 
 The goal of this project was to strengthen my practical skills in business intelligence and data visualization. It allowed me to apply the concepts learned in the Udemy course to a real Power BI project.
+
+![Näyttökuva 2026-03-16 204021](https://github.com/user-attachments/assets/abbdaf0f-6d3c-4aab-b3be-024510b4b877)
+
